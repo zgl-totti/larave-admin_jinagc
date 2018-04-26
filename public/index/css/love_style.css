@@ -1,0 +1,202 @@
+﻿*{margin: 0;padding: 0;border: 0;outline: none;}
+
+body{font-family: "微软雅黑"; background: #f8f8f8;jm52}
+
+body,html{ width: 100%;}e:15px
+
+input,button{ font-family: "微软雅黑";}
+
+a{text-decoration: none;}
+
+li{list-style:none;}
+
+.clear:after{content: '.';height: 0;visibility: hidden;display: block;clear: both;}
+
+.warp{ width: 100%; height: 100%; margin:0 auto;overflow: hidden;}
+
+.section_form #formid{margin:0 auto;width:853px; background: #f2581c; padding-bottom: 6%; padding-top: 3%;}
+
+.section_form #formid div{width:60%;float:left;margin-left: 20%;padding: 2% 0;}
+
+.section_form #formid label{width:22%;float:left;color:#fee501; font-size:22px;  margin-left: 2%; font-weight: 600;text-align:center;}
+
+.section_form #formid input{outline:none; width:300px;float:left;height:100%;border:none;color: #000; font-size:22px; background: #fff; padding: 1% 0;  border-radius: 3px;}
+
+.section_form #formid .infots{color:#fff; font-size: 14px; float: right;}
+
+.section_form #formid #btn{ border-radius:42px;font-size:24px;color:#f2581c; font-weight: 600; background:#fff001;margin-top:5%;width:47%; padding:1.5% 0;float: left; margin-left: 23%;}
+
+.Choose_endorsements{ width: 100%; background: #fff; margin: auto;  padding: 2% 0;}
+
+.Choose_endorsements p{ font-size: 30px; color: #fff; width: 50%; padding: 1% 0;background: #ed5050; text-align: center; margin: auto; border-radius: 5px;}
+
+.ch_end_ul{ width: 100%; padding: 1% 0 0 0 ;}
+
+.ch_end_ul li{ float: left; margin: 1%; width: 23%; background: #fff;padding-top: 0.5%;}
+
+.ch_end_ul li img{float: left; margin: 5%;}
+
+.ch_end_ul li p{float: left; font-size: 20px; color: #555; text-align: center; line-height: 70px;margin: 5% 1%;}
+
+.user-frame-items{width: 100%;margin: 0 auto;}
+
+
+
+.my_team{  width: 862px; margin: auto;}
+
+.heart_user_img{ display: block; margin: auto; width: 100px; height: 100px; border-radius: 30px; padding-top: 3%;}
+
+.heart_user_name{ font-size: 18px; color: #555555; text-align: center;margin-top: 20px;}
+
+.heart_open_time{ font-size: 14px; color: #8c8c8c; text-align: center; padding-bottom: 1%;}
+
+.weidian{font-size:16px ; color:#4596ef;  border:1px solid #4596ef ; text-align: center; width: 115px; height: 38px; line-height: 38px; margin: auto;}
+
+.heart_gx { width: 60%; margin: auto; padding: 5%  0;}
+
+.heart_gx li{ float: left; width:257px ; height:147px ; border:1px solid #d1d1d1 ; }
+
+.heart_gx li .lj{ font-size: 16px; color: #555; text-align: center;line-height: 60px;}
+
+.heart_gx li .li_money{font-size: 30px; color: #fc3030; text-align: center;line-height: 60px; font-weight: bold; }
+
+.ckxjhy{ width:640px ; height: 90px; border:1px solid #4596ef ; font-size:30px ; color: #FFF; background:#4596ef; text-align: center; line-height: 90px; margin: auto;}
+
+.my_team li {border-bottom: 1px solid #d1d1d1;padding: 2% 0; }
+
+.my_team li div{ float: left; width: 45%;}
+
+.my_team li .my_team_gxnum{ float: left; font-size: 18px; color: #fc3030; padding-top: 1%;}
+
+.my_team li .my_team_more{ float:right; font-size: 16px; color: #fc3030; border: 1px solid #fc3030; border-radius: 5px; padding:1% 4%;}
+
+.my_team li div img{ float: left;}
+
+.my_team li div div{ float: left; width: 80%; padding-left: 2%; padding-top: 2%;}
+
+.my_team_member{font-size: 16px; color: #555; font-weight: bold; margin-bottom: 2px;}
+
+.my_team_time{font-size: 14px; color: #8c8c8c;}
+
+.order {float: left; font-size:20px; color: #555555; padding: 1% 3%;  width: 40px; height: 40px; text-align: center;}
+
+.gold{ color: #fbcd25;}
+
+.silver{ color: #d6dce0;}
+
+.copper{color: #b18f8d;}
+
+.name_card { background:url(../images/name_cardbg.png) no-repeat top center; background-size: contain; width:598px; height: 748px; margin: auto; position: relative; margin-top: 2%;}
+
+.name_card img{ border-radius: 10px; position: absolute; bottom: 25%; left:30%;}
+
+.person_share{ width: 400px; margin: auto;}
+
+.person_share img{ float: left;}
+
+.person_share div{ float:left; width:52%; margin-left:7%;}
+
+.my_team li .cancel_more{ float:right; font-size: 16px; color: #4596ef; border: 1px solid #4596ef; border-radius: 5px; padding:1% 4%; margin-right: 2%;}
+
+.my_Endorsement li{ border: 1px solid #d1d1d1; }
+
+.my_Endorsement .my_team_time{ color: #fc4747;}
+
+/*.my_Endorsement{ width: 90%;}*/
+
+.my_Endorsement li { margin: 2% 0;}
+
+.my_Endorsement li img{ margin-left: 2%;}
+
+.dd_content{ width: 862px; margin: auto;height: 27px; border-bottom: 1px solid #d1d1d1; padding-bottom: 5px; margin-bottom: 10px;}
+
+.dd_content h2{ float: left; font-size: 16px; font-weight: 700; color: #555; height: 27px; line-height: 27px; margin-right: 20px;}
+
+.dd_content h2:before{ content: ""; float: left; height: 16px; width: 3px; background: #F32525; margin: 6px 10px 0 0;}
+
+.dd_content ul{ float: left; height: 27px; }
+
+.dd_content ul li{  display: inline-block;float: left; margin-right: 15px; line-height: 27px; border-bottom: 1px solid transparent;}
+
+.dd_content ul .active{border-bottom-color: #f42424; padding-bottom: 4px;}
+
+.dd_content ul li { font-size: 14px; color: #555;  cursor: pointer;}
+
+.dd_content ul li:hover,.dd_content ul li.active { color: #f42424; }
+
+.endor_order{width: 862px; margin: auto;}
+
+.endor_order_list{ margin: 10px 0; display: none;}
+
+.endor_order_list li{border: 1px solid #d3d3d3; font-size: 14px;  margin-bottom: 20px;}
+
+.endor_order_list_up{ padding:10px 20px; height:53px;line-height: 27px;  white-space: nowrap; border-bottom: 1px solid #d3d3d3;}
+
+.endor_order_list_up .t-statu{ width:100%; margin-right:0;height:24px;font-size: 16px; color: #555; float: left;line-height: 27px;white-space: nowrap;}
+
+.endor_order_list_up .t-statu .t-statu-name{float: left;font-size: 16px;color: #555;line-height: 27px;white-space: nowrap;}
+
+.endor_order_list_up .t-info{max-width: 600px;font-size: 12px; float: left;line-height: 27px;white-space: nowrap;}
+
+.endor_order_list_up .t-info .info-item{ margin-right: 20px;font-size: 12px;color:#8c8c8c;line-height: 27px;white-space: nowrap;}
+
+.endor_order_list_up .t-state{ float: right; width: 210px;text-align: right; font-size: 16px;color: #555;line-height: 27px;white-space: nowrap;}
+
+.endor_order_list_up .no{ color: #ED5050;}
+
+.endor_order_list_down{ padding: 20px;color: #8c8c8c;font-size: 14px; height:60px;}
+
+.endor_order_list_down .endc_left{ width: 660px;float: left;}
+
+.endc_left_img{ width: 70px;float: left;margin-right: 20px;}
+
+.endc_left_info{ padding-top: 5px;float: left; width: 570px;}
+
+.endc_left_info_name{margin-bottom: 5px;white-space: nowrap;color: #8c8c8c;font-size: 14px;text-overflow: ellipsis;overflow: hidden;display: block;width: 500px;float: left;color: #8c8c8c;}
+
+.endc_left_info_pirce{float: left;width: 50%;color: #8c8c8c;font-size: 14px;}
+
+.new_nocive{ width: 862px; margin: auto;}
+
+.title{font-size: 16px;color: #fe2c2c; white-space: nowrap;overflow: hidden;  text-overflow: ellipsis; padding: 2% 0; }
+
+.abstract{ font-size: 16px; width: 100%;color: #606060;text-overflow: -o-ellipsis-lastline;  overflow: hidden;  padding: 1% 0;  text-overflow: ellipsis;  display: -webkit-box;  -webkit-line-clamp: 2;  -webkit-box-orient: vertical;  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+<?php
+
+use Illuminate\Routing\Router;
+
+Admin::registerAuthRoutes();
+
+Route::group([
+    'prefix'        => config('admin.route.prefix'),
+    'namespace'     => config('admin.route.namespace'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+
+    $router->get('/', 'HomeController@index');
+
+    $router->resources([
+        'china/province' => China\ProvinceController::class,
+        'china/city' => China\CityController::class,
+        'china/district' => China\DistrictController::class,
+        'brand'=>BrandController::class,
+        'category'=>CategoryController::class,
+        'goods'=>GoodsController::class,
+        'order'=>OrderController::class,
+        'source'=>SourceController::class,
+        'express'=>ExpressController::class,
+        'pay'=>PayController::class,
+        'comment'=>CommentController::class,
+        'user'=>UserController::class,
+        'integral_goods'=>IntegralGoodsController::class,
+        'integral_order'=>IntegralOrderController::class,
+        'article_cate'=>ArticleCateController::class,
+        'article_content'=>ArticleContentController::class,
+        'chart_week'=>ChartWeekController::class,
+        'chart_month'=>ChartMonthController::class,
+        'mall'=>MallController::class,
+        'advertise'=>AdvertiseController::class,
+        'advertise_position'=>AdvertisePositionController::class,
+        'seckill'=>SeckillController::class,
+        'seckill_order'=>SeckillOrderController::class,
+        'bonus'=>BonusController::class,
+        'bonus_users'=>BonusUsersController::class,
+        'promotions'=>PromotionsController::class,
+    ]);
+
+    $router->post('order/shipments','OrderController@shipments');
+    $router->get('city','OrderController@city');
+    $router->get('town','OrderController@town');
+    $router->get('users/{type}','UserController@newly');
+    $router->get('orders/{type}','OrderController@newly');
+    $router->get('sale/{type}','OrderController@sale');
+    $router->get('comments/{id}','CommentController@examine')->where('id','[0-9]+');
+    $router->post('reply','CommentController@reply');
+
+});
