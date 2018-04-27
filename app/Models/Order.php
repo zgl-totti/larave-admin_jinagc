@@ -45,6 +45,7 @@ class Order extends Model
         return $this->hasOne(Pay::class,'id','pay_type');
     }
 
+
     /**
      * 发货
      * @param int $id
@@ -52,7 +53,7 @@ class Order extends Model
      * @author totti_zgl
      * @date 2018/4/12 11:10
      */
-    public function shipments(int $id)
+    public function shipments(int $id) : bool
     {
         $info=Order::find($id);
         if($info->order_status!=2){

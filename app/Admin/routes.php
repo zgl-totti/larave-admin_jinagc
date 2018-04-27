@@ -47,6 +47,8 @@ Route::group([
     $router->get('users/{type}','UserController@newly');
     $router->get('orders/{type}','OrderController@newly');
     $router->get('sale/{type}','OrderController@sale');
+    $router->get('after-sales/{id}','OrderController@afterSales')->where('id','[0-9]+');
+    $router->post('after-sales-service','OrderController@afterSalesService');
     $router->get('comments/{id}','CommentController@examine')->where('id','[0-9]+');
     $router->post('reply','CommentController@reply');
 

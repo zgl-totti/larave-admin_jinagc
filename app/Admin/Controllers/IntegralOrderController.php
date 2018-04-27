@@ -178,7 +178,7 @@ class IntegralOrderController extends Controller
 
             if($info->order_status==2){
                 $form->text('consignee','收货人')->rules('required');
-                $form->text('consignee_phone','收货电话')->rules('required');
+                $form->mobile('consignee_phone','收货电话')->rules('required|regex:/^1[34578]\d{9}$/');
 
                 $express=Express::where('status',1)->pluck('express_name','id');
                 $form->radio('express_id','快递')->options($express);

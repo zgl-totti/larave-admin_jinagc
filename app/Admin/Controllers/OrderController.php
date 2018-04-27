@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\ExcelExporter;
 use App\Admin\Extensions\Shipments;
+use App\Models\AfterSales;
 use App\Models\ChinaArea;
 use App\Models\Express;
 use App\Models\IntegralOrder;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use yii\console\Exception;
 
 class OrderController extends Controller
 {
@@ -124,7 +126,7 @@ class OrderController extends Controller
                     $actions->append(new Shipments(1,$actions->getKey()));
                 }
                 if ($row->order_status==8){
-                    $actions->append('<a href="/admin/brand"
+                    $actions->append('<a href="after-sales/'.$row->id.'"
                             class="btn btn-sm btn-facebook"
                             style="background: darkorchid"
                             data-id="{$this->id}"
@@ -315,7 +317,12 @@ class OrderController extends Controller
 
             if($info->order_status==2){
                 $form->text('consignee','收货人')->rules('required');
-                $form->text('consignee_phone','收货电话')->rules('required');
+
+                $form->mobile('consignee_phone','收货电话')
+                    //->options(['mask' => '999 9999 9999'])
+                    ->rules('required|regex:/^1[34578]\d{9}$/');
+
+                //$form->text('consignee_phone','收货电话')->rules('required');
 
                 $express=Express::where('status',1)->pluck('express_name','id');
                 $form->radio('express_id','快递')->options($express);
@@ -480,5 +487,82 @@ class OrderController extends Controller
             $content->body($this->sales($type));
         });
 
+    }
+
+    /**
+     * 售后详情
+     * @param int $id
+     * @return Content
+     * @author totti_zgl
+     * @date 2018/4/27 16:21
+     */
+    public function afterSales(int $id)
+    {
+        $info=AfterSales::with('goods')
+            ->with(['order'=>function($query){
+                $query->join('users as u','u.id','=','order.user_id')->select('u.id','u.name','order.*');
+            }])
+            ->where('order_id',$id)
+            ->first();
+
+        return Admin::content(function (Content $content) use ($info){
+
+            $content->header('售后处理');
+
+            $content->body(view('admin.after-sales',compact('info')));
+
+        });
+    }
+
+
+    /**
+     * 售后处理
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @author totti_zgl
+     * @date 2018/4/27 16:21
+     */
+    public function afterSalesService(Request $request)
+    {
+        $id=intval($request->input('id'));
+        $type=intval($request->input('type'));
+        $info=AfterSales::find($id);
+        $order=Order::find($info->order_id);
+        if($type==1){
+            DB::beginTransaction();
+            try{
+                $info->opinion=3;
+                $order->order_status=9;
+                $row1=$info->save();
+                $row2=$order->save();
+                if(empty($row1) || empty($row2)){
+                    throw new Exception('更新失败！');
+                }
+                DB::commit();
+                $result['status']=1;
+                $result['message']='处理完毕';
+                return response()->json($result);
+            }catch (Exception $exception){
+                DB::rollBack();
+                $result['status']=2;
+                $result['message']='处理失败';
+                return response()->json($result);
+            }
+        }elseif($type==2){
+            $info->opinion=3;
+            if($info->save()){
+                $result['status']=1;
+                $result['message']='处理成功';
+                return response()->json($result);
+            }else{
+                $result['status']=2;
+                $result['message']='处理失败';
+                return response()->json($result);
+            }
+        }else{
+            $result['status']=2;
+            $result['message']='非法操作';
+            return response()->json($result);
+        }
     }
 }

@@ -47,6 +47,16 @@ class CreateOrderTable extends Migration
             $table->decimal('buy_price',15,2);
             $table->timestamps();
         });
+
+        Schema::create('after-sales', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('order_id');
+            $table->integer('goods_id');
+            $table->text('content');
+            $table->smallInteger('opinion')->comment('1为未处理,2为不同意,3为同意')->default(1);
+            $table->integer('status')->comment('1为展示,2为删除')->default(1);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -59,5 +69,6 @@ class CreateOrderTable extends Migration
         Schema::dropIfExists('order');
         Schema::dropIfExists('order_status');
         Schema::dropIfExists('order_goods');
+        Schema::dropIfExists('after-sales');
     }
 }
