@@ -133,6 +133,8 @@ class IntegralOrderController extends Controller
                 if ($row->order_status == 2) {
                     $actions->append(new Shipments(2,$actions->getKey()));
                 }
+
+                $actions->prepend('<a href="integral-order-detail/'.$actions->getKey().'"><i class="fa fa-eye"></i></a>');
             });
 
             //导出
@@ -204,6 +206,41 @@ class IntegralOrderController extends Controller
 
             //$form->display('created_at', 'Created At');
             //$form->display('updated_at', 'Updated At');
+        });
+    }
+
+
+    /**
+     * 订单详情
+     * @param int $id
+     * @return Content
+     * @author totti_zgl
+     * @date 2018/5/2 9:43
+     */
+    public function orderDetail(int $id)
+    {
+        $info=IntegralOrder::with(['user','status','source','express','orderGoods'])
+            ->where('id',$id)
+            ->first();
+        $town=ChinaArea::find($info->district);
+        if($town->type==3){
+            $city=ChinaArea::find($town->parent_id);
+            $province=ChinaArea::find($city->parent_id);
+            $address=$province->name.$city->name.$town->name;
+        }elseif ($town->type==2){
+            $province=ChinaArea::find($info->parent_id);
+            $address=$province->name.$town->name;
+        }else{
+            $address=$town->name;
+        }
+        $info['address']=$address;
+
+        return Admin::content(function (Content $content) use ($info){
+
+            $content->header('积分订单详情');
+
+            $content->body(view('admin.integral-order-detail',compact('info')));
+
         });
     }
 }

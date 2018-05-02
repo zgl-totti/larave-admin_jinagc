@@ -14,9 +14,11 @@ use App\Models\SeckillOrder;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Layout\Row;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use yii\console\Exception;
@@ -71,12 +73,12 @@ class OrderController extends Controller
             $grid->column('user.name','订单用户');
             $grid->order_sn('订单号');
 
-            $grid->orderGoods('订单商品')->display(function ($orderGoods){
+            /*$grid->orderGoods('订单商品')->display(function ($orderGoods){
                 $orderGoods=array_map(function ($order_goods){
                     return str_limit($order_goods['goods_name'],20).'：¥ '.$order_goods['buy_price'].' * '.$order_goods['buy_number'].$order_goods['goods_brief'].'<br>';
                 },$orderGoods);
                 return join('<br>',$orderGoods);
-            });
+            });*/
 
             $grid->order_price('订单总价');
             $grid->column('consignee','收货人');
@@ -136,6 +138,8 @@ class OrderController extends Controller
                     );
                 }
 
+                $actions->prepend('<a href="order-detail/'.$actions->getKey().'"><i class="fa fa-eye"></i></a>');
+
                 // 当前行的数据数组
                 //$actions->row;
                 // 获取当前行主键值
@@ -149,7 +153,7 @@ class OrderController extends Controller
             //导出
             $filename='订单列表_'.date('Y/m/d');
             $column=['id','order_sn','order_price','consignee','consignee_phone','area','created_at','user','source','express','pay','status'];
-            $line=['A','B','C','D','E','F','G','H','I','J','K','L','M'];
+            $line=['A','B','C','D','E','F','G','H','I','J','K','L'];
             $header=['编号','订单号','订单总价','收货人','收货电话','收货地址','生成时间','订单用户','订单来源','快递','支付方式','订单状态'];
             $size=['B'=>25,'D'=>20,'E'=>25,'F'=>40,'G'=>30,'H'=>25];
             $relevance=['user'=>'name','source'=>'source_name','express'=>'express_name','pay'=>'pay_name','status'=>'status_name'];
@@ -363,6 +367,41 @@ class OrderController extends Controller
         $cityId = $request->get('q');
 
         return ChinaArea::where('parent_id', $cityId)->get(['id', DB::raw('name as text')]);
+    }
+
+
+    /**
+     * 订单详情
+     * @param int $id
+     * @return Content
+     * @author totti_zgl
+     * @date 2018/5/2 9:43
+     */
+    public function orderDetail(int $id)
+    {
+        $info=Order::with(['user','status','source','express','orderGoods'])
+            ->where('id',$id)
+            ->first();
+        $town=ChinaArea::find($info->district);
+        if($town->type==3){
+            $city=ChinaArea::find($town->parent_id);
+            $province=ChinaArea::find($city->parent_id);
+            $address=$province->name.$city->name.$town->name;
+        }elseif ($town->type==2){
+            $province=ChinaArea::find($info->parent_id);
+            $address=$province->name.$town->name;
+        }else{
+            $address=$town->name;
+        }
+        $info['address']=$address;
+
+        return Admin::content(function (Content $content) use ($info){
+
+            $content->header('订单详情');
+
+            $content->body(view('admin.order-detail',compact('info')));
+
+        });
     }
 
 
