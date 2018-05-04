@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Source;
+use App\Models\UsersLevel;
 
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -11,7 +11,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 
-class SourceController extends Controller
+class UsersLevelController extends Controller
 {
     use ModelForm;
 
@@ -24,7 +24,7 @@ class SourceController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('订单来源');
+            $content->header('会员等级');
             $content->description('列表');
 
             $content->body($this->grid());
@@ -41,8 +41,8 @@ class SourceController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('订单');
-            $content->description('来源');
+            $content->header('会员');
+            $content->description('等级');
 
             $content->body($this->form()->edit($id));
         });
@@ -53,16 +53,16 @@ class SourceController extends Controller
      *
      * @return Content
      */
-    public function create()
+    /*public function create()
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('订单');
-            $content->description('来源');
+            $content->header('会员');
+            $content->description('等级');
 
             $content->body($this->form());
         });
-    }
+    }*/
 
     /**
      * Make a grid builder.
@@ -71,19 +71,22 @@ class SourceController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Source::class, function (Grid $grid) {
+        return Admin::grid(UsersLevel::class, function (Grid $grid) {
 
             $grid->id('编号')->sortable();
 
-            $grid->source_name('订单来源')->label();
+            $grid->level_name('会员等级')->label();
+            $grid->level_integral('等级积分');
+            $grid->status('状态')->switch([
+                'on'=>['text'=>'展示'],
+                'off'=>['text'=>'下架']
+            ]);
 
             $grid->created_at('创建时间');
             //$grid->updated_at();
 
-            $grid->filter(function ($filter){
-                $filter->disableIdFilter();
-                $filter->like('source_name','来源名称')->placeholder('请输入来源名称');
-            });
+            $grid->disableExport();
+            $grid->disableFilter();
         });
     }
 
@@ -94,15 +97,20 @@ class SourceController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Source::class, function (Form $form) {
+        return Admin::form(UsersLevel::class, function (Form $form) {
 
             //$form->display('id', 'ID');
-
-            $id=request()->route()->parameters()['source'] ?? 0;
+            $id=request()->route()->parameters()['users_level'] ?? 0;
             if($id){
-                $form->text('source_name','订单来源')->rules('required|unique:source,source_name,'.$id.',id');
+                $form->text('level_name','会员等级')->rules('required|unique:users_level,level_name,'.$id.',id');
             }else{
-                $form->text('source_name','订单来源')->rules('required|unique:source');
+                $form->text('level_name','会员等级')->rules('required|unique:users_level');
+            }
+
+            $form->number('level_integral','等级积分');
+
+            if($id){
+                $form->switch('status','状态');
             }
 
             $form->display('created_at', '创建时间');

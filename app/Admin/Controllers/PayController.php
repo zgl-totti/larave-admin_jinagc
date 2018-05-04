@@ -79,6 +79,11 @@ class PayController extends Controller
 
             $grid->created_at('创建时间');
             //$grid->updated_at();
+
+            $grid->filter(function ($filter){
+                $filter->disableIdFilter();
+                $filter->like('pay_name','支付方式')->placeholder('请输入支付方式');
+            });
         });
     }
 

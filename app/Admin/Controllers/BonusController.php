@@ -76,7 +76,7 @@ class BonusController extends Controller
 
             $grid->id('编号')->sortable();
 
-            $grid->bonus_name('活动名称');
+            $grid->bonus_name('活动名称')->label();
             $grid->bonus_price('红包金额');
             $grid->order_price('最小订单金额');
             $grid->source('适用范围')->display(function ($sources){
@@ -99,7 +99,7 @@ class BonusController extends Controller
 
             $grid->filter(function ($filter){
                 $filter->disableIdFilter();
-                $filter->like('bonus_name','红包名称')->placeholder('请输入品牌名称');
+                $filter->like('bonus_name','红包名称')->placeholder('请输入红包名称');
                 $filter->equal('status', '状态')->radio(['' => '全部'] + Bonus::statusMap());
             });
         });
@@ -128,7 +128,7 @@ class BonusController extends Controller
             $form->checkbox('source','适用范围')->options(Source::pluck('source_name','id'));
 
             if($id){
-                $form->switch('status');
+                $form->switch('status','状态');
             }
             $form->datetimeRange('begin_at','end_at','活动时间');
             $form->datetimeRange('use_begin_at','use_end_at','红包使用时间');

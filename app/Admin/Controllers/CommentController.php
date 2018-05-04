@@ -4,6 +4,11 @@ namespace App\Admin\Controllers;
 
 use App\Models\Comment;
 use App\Models\CommentReply;
+use App\Models\CommentStatus;
+use App\Models\Goods;
+use App\Models\IntegralOrder;
+use App\Models\Order;
+use App\User;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -77,7 +82,7 @@ class CommentController extends Controller
      * @param $id
      * @return Content
      */
-    public function edit($id)
+    /*public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
 
@@ -86,14 +91,14 @@ class CommentController extends Controller
 
             $content->body($this->form()->edit($id));
         });
-    }
+    }*/
 
     /**
      * Create interface.
      *
      * @return Content
      */
-    public function create()
+    /*public function create()
     {
         return Admin::content(function (Content $content) {
 
@@ -102,7 +107,7 @@ class CommentController extends Controller
 
             $content->body($this->form());
         });
-    }
+    }*/
 
     /**
      * Make a grid builder.
@@ -121,13 +126,14 @@ class CommentController extends Controller
                 return str_limit(strip_tags($content),100);
             });
 
-            //$grid->source('订单');
-
-            /*if($this->source==1){
-                $grid->column('order.order_sn','订单号');
-            }elseif ($this->source==2){
-                $grid->column('integralOrder.order_sn','订单号');
-            }*/
+            $grid->column('source','订单号')->display(function ($source) {
+                if($source==1){
+                    $info=Order::find($this->order_id);
+                }elseif($source==2){
+                    $info=IntegralOrder::find($this->order_id);
+                }
+                return $info->order_sn ?? '';
+            });
 
             $grid->column('goods.goods_name','评论商品');
             $grid->column('commentStatus.status_name','好评度')->label();
@@ -139,6 +145,30 @@ class CommentController extends Controller
             $grid->actions(function ($actions){
                 $actions->disableEdit();
                 $actions->prepend('<a href="comments/'.$actions->getKey().'"><i class="fa fa-eye"></i></a>');
+            });
+
+            $grid->filter(function ($filter){
+                $filter->disableIdFilter();
+
+                $filter->where(function ($query){
+                    $username=trim($this->input);
+                    $info=User::where('name','like',$username.'%')->select('id')->get();
+                    $query->whereIn('user_id',$info);
+                },'评论人');
+
+                $filter->where(function ($query){
+                    $order_sn=trim($this->input);
+                    $info=Order::where('order_sn','like',$order_sn.'%')->select('id')->get();
+                    $query->whereIn('order_id',$info);
+                },'订单号');
+
+                $filter->where(function ($query){
+                    $goods_name=trim($this->input);
+                    $info=Goods::where('goods_name','like',$goods_name.'%')->select('id')->get();
+                    $query->whereIn('goods_id',$info);
+                },'商品');
+
+                $filter->equal('comment_status', '好评度')->radio(['' => '全部'] + CommentStatus::pluck('status_name','id')->toArray());
             });
 
         });

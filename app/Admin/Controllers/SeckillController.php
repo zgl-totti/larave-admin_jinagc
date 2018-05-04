@@ -76,8 +76,8 @@ class SeckillController extends Controller
 
             $grid->id('编号')->sortable();
 
-            $grid->title('活动标题');
-            $grid->column('goods.goods_name','商品名称');
+            $grid->title('活动标题')->label();
+            $grid->column('goods.goods_name','商品名称')->label('info');
             $grid->price('秒杀价格');
             $grid->num('商品数量');
             $grid->limit('限购数量');

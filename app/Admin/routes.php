@@ -25,6 +25,8 @@ Route::group([
         'pay'=>PayController::class,
         'comment'=>CommentController::class,
         'user'=>UserController::class,
+        'users_level'=>UsersLevelController::class,
+        'users_integral'=>UsersIntegralController::class,
         'integral_goods'=>IntegralGoodsController::class,
         'integral_order'=>IntegralOrderController::class,
         'article_cate'=>ArticleCateController::class,

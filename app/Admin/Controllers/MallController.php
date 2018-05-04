@@ -75,12 +75,12 @@ class MallController extends Controller
 
             $grid->id('编号')->sortable();
 
-            $grid->mall_name('商城名字');
+            $grid->mall_name('商城名称')->label();
             $grid->column('describe','描述')->display(function ($describe){
                return str_limit(strip_tags($describe),20);
             });
-            $grid->keywords('关键字');
-            $grid->logo('主图')->image(asset('storage').'/',50,50);
+            $grid->keywords('关键字')->label('info');
+            $grid->logo('LOGO')->image(asset('storage').'/',50,50);
             $grid->hotline('热线');
             $grid->qq('客服');
 
@@ -97,7 +97,7 @@ class MallController extends Controller
             $grid->filter(function ($filter){
                 $filter->disableIdFilter();
 
-                $filter->like('mall_name', '商城名字')->placeholder('请输入商城名字');
+                $filter->like('mall_name', '商城名称')->placeholder('请输入商城名称');
 
                 $filter->equal('status', '状态')->radio(['' => '全部'] + Mall::statusMap());
             });
@@ -118,11 +118,16 @@ class MallController extends Controller
 
             $id=request()->route()->parameters()['mall'] ?? 0;
 
-            $form->text('mall_name','商城名字')->rules('required');
+            if($id){
+                $form->text('mall_name','商城名称')->rules('required|unique:mall,mall_name,'.$id.',id');
+            }else{
+                $form->text('mall_name','商城名称')->rules('required|unique:mall');
+            }
+
             $form->text('describe','描述')->rules('required');
             $form->text('keywords','关键字')->rules('required');
-            $form->image('logo')->uniqueName()->move('mall','public')->rules('required');
-            $form->text('hotline','热线')->rules('required');
+            $form->image('logo','LOGO')->uniqueName()->move('mall','public')->rules('required');
+            $form->text('hotline','热线')->rules('required|integer');
             $form->text('qq','客服')->rules('required|integer');
 
             if($id){

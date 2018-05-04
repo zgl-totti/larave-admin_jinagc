@@ -76,8 +76,8 @@ class ArticleContentController extends Controller
 
             $grid->id('编号')->sortable();
 
-            $grid->column('cate.cate_name','分类');
-            $grid->title('标题')->label();
+            $grid->column('cate.cate_name','分类')->label();
+            $grid->title('标题')->label('info');
             $grid->column('content','内容')->display(function ($content){
                 return str_limit(strip_tags($content),30);
             });
@@ -121,7 +121,12 @@ class ArticleContentController extends Controller
             //$form->display('id', 'ID');
 
             $id=request()->route()->parameters()['article_content'] ?? 0;
-            $form->text('title','标题')->rules('required');
+
+            if($id){
+                $form->text('title','标题')->rules('required|unique:article_contents,title,'.$id.',id');
+            }else{
+                $form->text('title','标题')->rules('required|unique:article_contents');
+            }
 
             $form->select('cate_id','分类')->options(ArticleCates::selectOptions())->rules('required');
 

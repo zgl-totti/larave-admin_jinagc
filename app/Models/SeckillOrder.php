@@ -8,6 +8,12 @@ class SeckillOrder extends Model
 {
     protected $table='seckill_order';
 
+    public static function statusMap()
+    {
+        return OrderStatus::pluck('status_name','id')->toArray();
+    }
+
+
     public function user()
     {
         return $this->hasOne(\App\User::class,'id','user_id');

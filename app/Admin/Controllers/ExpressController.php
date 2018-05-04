@@ -89,6 +89,11 @@ class ExpressController extends Controller
 
             $grid->created_at('创建时间');
             //$grid->updated_at();
+
+            $grid->filter(function ($filter){
+                $filter->disableIdFilter();
+                $filter->like('express_name','快递名称')->placeholder('请输入快递名称');
+            });
         });
     }
 
@@ -103,7 +108,7 @@ class ExpressController extends Controller
 
             //$form->display('id', 'ID');
 
-            $id=request()->route()->parameters()['express'];
+            $id=request()->route()->parameters()['express'] ?? 0;
             if (empty($id)){
                 $form->text('express_name','快递公司')->rules('required|unique:express');
             }else{

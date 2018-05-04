@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\UsersLevel;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -36,5 +37,10 @@ class User extends Authenticatable
             self::STATUS_ALLOT=>'展示',
             self::STATUS_UNALLOT=>'禁用'
         ];
+    }
+
+    public function levels()
+    {
+        return $this->hasOne(UsersLevel::class,'id','level');
     }
 }

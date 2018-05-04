@@ -8,6 +8,11 @@ class IntegralOrder extends Model
 {
     protected $table='integral_order';
 
+    public static function statusMap()
+    {
+        return OrderStatus::whereNotIn('id',[1])->pluck('status_name','id')->toArray();
+    }
+
     public function user()
     {
         return $this->hasOne(\App\User::class,'id','user_id');

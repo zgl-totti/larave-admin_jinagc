@@ -104,6 +104,12 @@ class IntegralGoodsController extends Controller
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
 
+                $filter->where(function ($query){
+                    $goods_name=trim($this->input);
+                    $info=Goods::where('goods_name','like','%'.$goods_name.'%')->select('id')->get();
+                    $query->whereIn('goods_id',$info);
+                },'商品名称');
+
                 $filter->between('integral','积分');
 
                 $filter->equal('status', '状态')->radio(['' => '全部'] + Goods::statusMap());

@@ -123,6 +123,7 @@ class GoodsController extends Controller
 
             $grid->market_price('市场价格');
             $grid->mail_price('商城价格');
+            $grid->inventory_number('库存量');
             $grid->sale_number('销量');
 
             $grid->column('标签')->switchGroup([
@@ -154,6 +155,8 @@ class GoodsController extends Controller
 
                 $filter->equal('brand_id','品牌')->select(Brand::pluck('brand_name','id'));
                 $filter->in('cate_id','分类')->select(Category::selectOptions());
+
+                $filter->between('mail_price','商品价格');
 
                 $filter->equal('status', '状态')->radio(['' => '全部'] + Goods::statusMap());
             });
@@ -204,7 +207,7 @@ class GoodsController extends Controller
 
             $form->editor('goods_unit','商品简介')->rules('required');
 
-            $form->image('pic','商品主图')->uniqueName()->move('goods','public')->rules('required');
+            $form->image('pic','商品主图')->uniqueName()->move('goods','public')->removable()->rules('required');
 
             $form->multipleImage('images', '商品附图')->uniqueName()->removable();
 

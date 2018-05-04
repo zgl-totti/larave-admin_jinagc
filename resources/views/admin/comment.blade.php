@@ -29,7 +29,11 @@
                         <div class="col-sm-8">
                             <div class="box box-solid no-margin">
                                 <div class="box-body">
-                                    {{$info->order->order_sn}}&nbsp;
+                                    @if($info->source==1)
+                                        {{$info->order->order_sn}}&nbsp;
+                                    @else
+                                        {{$info->integralOrder->order_sn}}&nbsp;
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -84,7 +88,7 @@
 </div>
 {{--</div>
 </div>--}}
-<script>
+<script type="text/javascript">
     $('.form-history-back').on('click', function (event) {
         event.preventDefault();
         history.back(1);

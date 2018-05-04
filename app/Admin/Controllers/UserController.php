@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\UsersLevel;
 use App\User;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -77,6 +78,9 @@ class UserController extends Controller
             $grid->name('用户名')->label();
             $grid->email('邮箱');
 
+            $grid->integral('会员积分');
+            $grid->column('levels.level_name','会员等级')->label('info');
+
             $grid->status('状态')->switch([
                 'on' => ['text' => '显示'],
                 'off' => ['text' => '停用'],
@@ -96,6 +100,11 @@ class UserController extends Controller
 
                 $filter->like('name', '用户名')->placeholder('请输入用户名');
 
+                $filter->equal('level','会员等级')->select(UsersLevel::pluck('level_name','id')->toArray());
+
+                $filter->between('integral','会员积分');
+
+                //$filter->equal('level','会员等级')->radio([''=>'全部'] + UsersLevel::pluck('level_name','id')->toArray());
                 $filter->equal('status', '状态')->radio(['' => '全部'] + User::statusMap());
             });
 

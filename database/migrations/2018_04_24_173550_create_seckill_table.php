@@ -62,7 +62,7 @@ class CreateSeckillTable extends Migration
             $table->integer('order_id');
             $table->integer('bonus_id');
             $table->decimal('money',15,2);
-            $table->smallInteger('status')->comment('1为已使用2为未使用');
+            $table->smallInteger('status')->comment('1为已使用2为未使用3为过期');
             $table->timestamps();
         });
 

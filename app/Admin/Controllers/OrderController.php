@@ -11,14 +11,14 @@ use App\Models\IntegralOrder;
 use App\Models\Order;
 
 use App\Models\SeckillOrder;
+use App\Models\Source;
+use App\User;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
-use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
-use Encore\Admin\Layout\Row;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use yii\console\Exception;
@@ -164,9 +164,26 @@ class OrderController extends Controller
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
                 // 在这里添加字段过滤器
+
+                $filter->where(function ($query){
+
+                    $username=$this->input;
+                    $info=User::where('name','like',$username.'%')->select('id')->get();
+
+                    $query->whereIn('user_id',$info);
+
+                },'订单用户');
+
                 $filter->like('order_sn', '订单编号')->placeholder('请输入订单编号');
+
+                $filter->like('consignee_phone','收货电话')->placeholder('请输入收货电话');
+                $filter->equal('order_status', '订单状态')->select(Order::statusMap());
+                $filter->equal('order_source', '订单来源')->select(Source::pluck('source_name','id')->toArray());
+                $filter->equal('express_id', '快递')->select(Express::pluck('express_name','id')->toArray());
+
                 $filter->between('created_at','生成时间')->datetime();
-                $filter->equal('order_status', '订单状态')->radio(['' => '全部'] + Order::statusMap());
+
+                /*$filter->equal('order_status', '订单状态')->radio(['' => '全部'] + Order::statusMap());*/
             });
 
             if($type=='today'){
@@ -252,14 +269,32 @@ class OrderController extends Controller
             $grid->disableCreateButton();
 
             $grid->actions(function ($actions) {
+
                 $actions->disableDelete();
-                $actions->disableEdit();
+
+                $row=$actions->row;
+
+                if($row->order_status==2){
+                    $actions->append(new Shipments(1,$actions->getKey()));
+                }
+                if ($row->order_status==8){
+                    $actions->append('<a href="/admin/after-sales/'.$row->id.'"
+                            class="btn btn-sm btn-facebook"
+                            style="background: darkorchid"
+                            data-id="{$this->id}"
+                            data-container="body">
+                            售后
+                        </a>'
+                    );
+                }
+
+                $actions->prepend('<a href="'.url('admin/order-detail').'/'.$actions->getKey().'"><i class="fa fa-eye"></i></a>');
             });
 
             //导出
             $filename='订单列表_'.date('Y/m/d');
             $column=['id','order_sn','order_price','consignee','consignee_phone','area','created_at','user','source','express','pay','status'];
-            $line=['A','B','C','D','E','F','G','H','I','J','K','L','M'];
+            $line=['A','B','C','D','E','F','G','H','I','J','K','L'];
             $header=['编号','订单号','订单总价','收货人','收货电话','收货地址','生成时间','订单用户','订单来源','快递','支付方式','订单状态'];
             $size=['B'=>25,'D'=>20,'E'=>25,'F'=>40,'G'=>30,'H'=>25];
             $relevance=['user'=>'name','source'=>'source_name','express'=>'express_name','pay'=>'pay_name','status'=>'status_name'];
@@ -271,8 +306,24 @@ class OrderController extends Controller
                 $filter->disableIdFilter();
                 // 在这里添加字段过滤器
                 $filter->like('order_sn', '订单编号')->placeholder('请输入订单编号');
+
+                $filter->where(function ($query){
+
+                    $username=$this->input;
+                    $info=User::where('name','like',$username.'%')->select('id')->get();
+
+                    $query->whereIn('user_id',$info);
+
+                },'订单用户');
+
+                $filter->like('consignee_phone','收货电话')->placeholder('请输入收货电话');
+                $filter->equal('order_status', '订单状态')->select(Order::statusMap());
+                $filter->equal('order_source', '订单来源')->select(Source::pluck('source_name','id')->toArray());
+                $filter->equal('express_id', '快递')->select(Express::pluck('express_name','id')->toArray());
+
                 $filter->between('created_at','生成时间')->datetime();
-                //$filter->equal('order_status', '订单状态')->radio(['' => '全部'] + Order::statusMap());
+
+                /*$filter->equal('order_status', '订单状态')->radio(['' => '全部'] + Order::statusMap());*/
             });
 
             if($type=='today'){

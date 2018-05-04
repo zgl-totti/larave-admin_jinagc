@@ -76,9 +76,25 @@ class AdvertiseController extends Controller
 
             $grid->id('编号')->sortable();
 
-            $grid->advertise_name('广告名字');
-            $grid->column('position.position_name','广告位置');
+            $grid->advertise_name('广告名字')->label();
+            //$grid->column('position.position_name','广告位置');
+
             $grid->image('图片')->image(asset('storage').'/',50,50);
+
+            $grid->column('position_id','广告位置')->display(function ($position){
+                $info=AdvertisePosition::find($position);
+                if($info->parent_id != 0){
+                    $parent=AdvertisePosition::find($info->parent_id);
+                    $str=$parent->position_name;
+                }else{
+                    $str='';
+                }
+                return $str.$info->position_name;
+            })->label('info');
+
+            $grid->column('position.width','广告宽度');
+            $grid->column('position.height','广告高度');
+
             $grid->status('状态')->switch([
                 'on'=>['text'=>'展示'],
                 'off'=>['text'=>'下架'],
@@ -93,6 +109,7 @@ class AdvertiseController extends Controller
                 $filter->disableIdFilter();
 
                 $filter->like('advertise_name', '广告名称')->placeholder('请输入广告名称');
+                $filter->in('position_id','广告位置')->select(AdvertisePosition::selectOptions());
                 $filter->equal('status', '状态')->radio(['' => '全部'] + Advertise::statusMap());
             });
 

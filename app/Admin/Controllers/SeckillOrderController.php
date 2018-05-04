@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Seckill;
 use App\Models\SeckillOrder;
 
+use App\Models\Source;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -137,7 +138,7 @@ class SeckillOrderController extends Controller
                 $row = $actions->row;
 
                 if ($row->order_status == 2) {
-                    $actions->append(new Shipments(2,$actions->getKey()));
+                    $actions->append(new Shipments(3,$actions->getKey()));
                 }
             });
 
@@ -155,10 +156,12 @@ class SeckillOrderController extends Controller
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
                 // 在这里添加字段过滤器
-                $filter->like('order_sn', '订单编号')->placeholder('请输入订单编号');
                 $filter->equal('seckill_id','秒杀活动')->select(Seckill::pluck('title','id'));
+                $filter->like('order_sn', '订单编号')->placeholder('请输入订单编号');
+                $filter->equal('order_status','订单状态')->select(SeckillOrder::statusMap());
+                $filter->equal('order_source', '订单来源')->select(Source::pluck('source_name','id')->toArray());
+                $filter->equal('express_id', '快递')->select(Express::pluck('express_name','id')->toArray());
                 $filter->between('created_at','生成时间')->datetime();
-                $filter->equal('order_status', '订单状态')->radio(['' => '全部'] + SeckillOrder::statusMap());
             });
         });
     }

@@ -76,8 +76,8 @@ class PromotionsController extends Controller
 
             $grid->id('编号')->sortable();
 
-            $grid->title('活动标题');
-            $grid->column('goods.goods_name','促销商品');
+            $grid->title('活动标题')->label();
+            $grid->column('goods.goods_name','促销商品')->label('info');
             $grid->promotions_price('促销价格');
             $grid->inventory_number('促销数量');
             $grid->sale_number('销量');
@@ -95,6 +95,9 @@ class PromotionsController extends Controller
             $grid->filter(function ($filter){
                 $filter->disableIdFilter();
                 $filter->like('title','活动名称')->placeholder('请输入活动名称');
+                $filter->between('begin_at','活动开始时间')->datetime();
+
+                $filter->equal('status', '状态')->radio(['' => '全部'] + Promotions::statusMap());
             });
         });
     }

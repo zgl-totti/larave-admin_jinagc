@@ -8,6 +8,8 @@ use App\Models\ChinaArea;
 use App\Models\Express;
 use App\Models\IntegralOrder;
 
+use App\Models\Order;
+use App\Models\Source;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -151,9 +153,26 @@ class IntegralOrderController extends Controller
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
                 // 在这里添加字段过滤器
+
+                $filter->where(function ($query){
+
+                    $username=$this->input;
+                    $info=User::where('name','like',$username.'%')->select('id')->get();
+
+                    $query->whereIn('user_id',$info);
+
+                },'订单用户');
+
                 $filter->like('order_sn', '订单编号')->placeholder('请输入订单编号');
+
+                $filter->like('consignee_phone','收货电话')->placeholder('请输入收货电话');
+                $filter->equal('order_status', '订单状态')->select(IntegralOrder::statusMap());
+                $filter->equal('order_source', '订单来源')->select(Source::pluck('source_name','id')->toArray());
+                $filter->equal('express_id', '快递')->select(Express::pluck('express_name','id')->toArray());
+
                 $filter->between('created_at','生成时间')->datetime();
-                $filter->equal('order_status', '订单状态')->radio(['' => '全部'] + IntegralOrder::statusMap());
+
+                /*$filter->equal('order_status', '订单状态')->radio(['' => '全部'] + Order::statusMap());*/
             });
 
         });
