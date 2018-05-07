@@ -16,6 +16,7 @@ class CreateOrderTable extends Migration
         Schema::create('integral_goods', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('goods_id');
+            $table->json('type');
             $table->integer('integral');
             $table->smallInteger('status')->comment('1为展示2为下架')->default(1);
             $table->timestamps();
@@ -41,6 +42,7 @@ class CreateOrderTable extends Migration
             $table->increments('id');
             $table->integer('order_id');
             $table->integer('goods_id');
+            $table->integer('type_id');
             $table->integer('buy_number');
             $table->integer('integral');
             $table->timestamps();

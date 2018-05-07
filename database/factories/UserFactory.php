@@ -65,6 +65,7 @@ $factory->define(App\Models\OrderGoods::class, function (Faker $faker) {
     return [
         'order_id' => rand(1,10000),
         'goods_id'=>rand(1,11),
+        'type_id'=>rand(1,10),
         'buy_number'=>rand(1,100),
         'buy_price' => rand(100,10000),
     ];

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Goods;
 
 use App\Models\GoodsPic;
+use App\Models\GoodsType;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -120,6 +121,17 @@ class GoodsController extends Controller
                 return $img ?? '';
             });*/
 
+            $grid->type('类型')->display(function ($type){
+                if(empty($type)){
+                    return '';
+                }
+                $type=array_map(function ($id){
+                    $info=GoodsType::find($id);
+                    return "<button class='btn btn-info' style='background-color: $info->tag;width: 35px;height: 20px;'></button>".'&nbsp;&nbsp;'.$info->name;
+                },$type);
+
+                return join('<br>',$type);
+            });
 
             $grid->market_price('市场价格');
             $grid->mail_price('商城价格');
@@ -189,7 +201,10 @@ class GoodsController extends Controller
             $form->select('cate_id','分类')->options(Category::selectOptions())->rules('required');
 
             $form->text('goods_keywords','关键字')->rules('required');
-            $form->text('goods_brief','商品规格')->rules('required');
+
+            $form->checkbox('type','商品类型')->options(GoodsType::pluck('name','id'))->rules('required');
+
+            $form->text('goods_brief','商品单位')->rules('required');
 
             $form->currency('market_price','市场价格')->symbol('￥')->rules('required|numeric');
             $form->currency('mail_price','商城价格')->symbol('￥')->rules('required|numeric');

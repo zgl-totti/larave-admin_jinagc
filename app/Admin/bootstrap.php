@@ -25,3 +25,8 @@ Encore\Admin\Grid\Column::extend('shipments',App\Admin\Extensions\Shipments::cla
 Encore\Admin\Form::extend('editor', App\Admin\Extensions\Form\WangEditor::class);
 
 Encore\Admin\Facades\Admin::js('/vendor/echarts/echarts.js');
+
+Encore\Admin\Grid\Column::extend('color',function ($value){
+    if(empty($value)){return '';}
+    return "<button class='btn btn-info' style='background-color: $value;width: 35px;height: 20px;'></button>";
+});

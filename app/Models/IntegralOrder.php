@@ -43,7 +43,8 @@ class IntegralOrder extends Model
         return $this->hasMany(IntegralOrderGoods::class,'order_id','id')
             ->join('integral_goods as ig','ig.id','integral_order_goods.goods_id')
             ->join('goods as g','g.id','ig.goods_id')
-            ->select('integral_order_goods.*','ig.id','ig.goods_id','g.goods_name','g.goods_brief');
+            ->join('goods_type as t','t.id','integral_order_goods.type_id')
+            ->select('integral_order_goods.*','ig.id','ig.goods_id','g.goods_name','g.goods_brief','t.id as type_id','t.name as type_name');
     }
 
 

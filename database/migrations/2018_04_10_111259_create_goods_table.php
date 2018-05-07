@@ -19,6 +19,7 @@ class CreateGoodsTable extends Migration
             $table->text('goods_unit');
             $table->string('goods_keywords',50);
             $table->string('goods_brief');
+            $table->json('type');
             $table->integer('brand_id');
             $table->integer('cate_id');
             $table->decimal('market_price',15,2);
@@ -34,6 +35,13 @@ class CreateGoodsTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('goods_type', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name',30)->unique();
+            $table->string('tag');
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -44,5 +52,6 @@ class CreateGoodsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('goods');
+        Schema::dropIfExists('goods_type');
     }
 }

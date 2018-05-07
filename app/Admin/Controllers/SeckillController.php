@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Goods;
+use App\Models\GoodsType;
 use App\Models\Seckill;
 
 use Encore\Admin\Form;
@@ -78,6 +79,20 @@ class SeckillController extends Controller
 
             $grid->title('活动标题')->label();
             $grid->column('goods.goods_name','商品名称')->label('info');
+
+            $grid->type('类型')->display(function ($type){
+                if(empty($type)){
+                    return '';
+                }
+
+                $type=array_map(function ($id){
+                    $info=GoodsType::find($id);
+                    return "<button class='btn btn-info' style='background-color: $info->tag;width: 35px;height: 20px;'></button>".'&nbsp;&nbsp;'.$info->name;
+                },$type);
+
+                return join('<br>',$type);
+            });
+
             $grid->price('秒杀价格');
             $grid->num('商品数量');
             $grid->limit('限购数量');
@@ -119,17 +134,22 @@ class SeckillController extends Controller
             $id=request()->route()->parameters()['seckill'] ?? 0;
             if(empty($id)){
                 $form->text('title','活动标题')->rules('required|unique:seckill');
-                $form->select('goods_id','商品名称')->options(function (){
-                    $brands=Goods::where('status',1)->pluck('goods_name','id');
-                    return $brands->prepend('请选择商品',0);
-                })->rules('required|unique:seckill');
             }else {
                 $form->text('title','活动标题')->rules('required|unique:seckill,title,'.$id.',id');
-                $form->select('goods_id', '商品名称')->options(function () {
-                    $brands = Goods::where('status', 1)->pluck('goods_name', 'id');
-                    return $brands->prepend('请选择商品', 0);
-                })->rules('required|unique:seckill,goods_id,' . $id . ',id');
             }
+
+            $form->select('goods_id','商品名称')->options(function (){
+                $goods=Goods::where('status',1)->pluck('goods_name','id');
+                return $goods->prepend('请选择商品',0);
+            })->load('type',url('admin/type'))->rules('required');
+
+            if($id){
+                $info=Seckill::with('goods')->where('id',$id)->first();
+                $type=GoodsType::whereIn('id',$info->goods->type)->pluck('name','id');
+            }else{
+                $type=[];
+            }
+            $form->multipleSelect('type','商品类型')->options($type);
 
             $form->currency('price','秒杀价格')->symbol('￥')->rules('required|numeric');
             $form->number('num','商品数量')->rules('required|integer');

@@ -69,7 +69,7 @@
                     </div>
                     <div class="form-group ">
                         <label class="col-sm-2 control-label">订单商品</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             @foreach($info->orderGoods as $item)
                                 <div class="box box-solid no-margin">
                                     <div class="box-body">
@@ -78,7 +78,16 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
+                            @foreach($info->orderGoods as $item)
+                                <div class="box box-solid no-margin">
+                                    <div class="box-body">
+                                        {{$item->type_name}}&nbsp;&nbsp;
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="col-sm-3">
                             @foreach($info->orderGoods as $item)
                                 <div class="box box-solid no-margin">
                                     <div class="box-body">

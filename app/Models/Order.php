@@ -17,7 +17,8 @@ class Order extends Model
     {
         return $this->hasMany(OrderGoods::class,'order_id','id')
             ->join('goods','goods.id','order_goods.goods_id')
-            ->select('order_goods.*','goods.id','goods.goods_name','goods.goods_brief');
+            ->join('goods_type as t','t.id','order_goods.type_id')
+            ->select('order_goods.*','goods.id','goods.goods_name','goods.goods_brief','t.id as type_id','t.name as type_name');
     }
 
     public function user()

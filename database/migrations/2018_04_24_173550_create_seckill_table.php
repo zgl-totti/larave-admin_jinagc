@@ -17,6 +17,7 @@ class CreateSeckillTable extends Migration
             $table->increments('id');
             $table->string('title')->unique();
             $table->integer('goods_id');
+            $table->json('type');
             $table->decimal('price',15,2);
             $table->integer('num');
             $table->integer('limit');
@@ -31,6 +32,7 @@ class CreateSeckillTable extends Migration
             $table->integer('seckill_id');
             $table->integer('num');
             $table->integer('price');
+            $table->integer('type_id');
             $table->integer('order_status');
             $table->integer('user_id');
             $table->string('consignee');
@@ -70,6 +72,7 @@ class CreateSeckillTable extends Migration
             $table->increments('id');
             $table->string('title')->unique();
             $table->integer('goods_id');
+            $table->json('type');
             $table->decimal('promotions_price',15,2);
             $table->integer('inventory_number');
             $table->integer('sale_number');

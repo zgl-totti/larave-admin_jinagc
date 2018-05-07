@@ -19,6 +19,7 @@ Route::group([
         'brand'=>BrandController::class,
         'category'=>CategoryController::class,
         'goods'=>GoodsController::class,
+        'goods_type'=>GoodsTypeController::class,
         'order'=>OrderController::class,
         'source'=>SourceController::class,
         'express'=>ExpressController::class,
@@ -53,6 +54,7 @@ Route::group([
     $router->get('after-sales/{id}','OrderController@afterSales')->where('id','[0-9]+');
     $router->post('after-sales-service','OrderController@afterSalesService');
     $router->get('integral-order-detail/{id}','IntegralOrderController@orderDetail')->where('id','[0-9]+');
+    $router->get('type','IntegralGoodsController@type');
     $router->get('comments/{id}','CommentController@examine')->where('id','[0-9]+');
     $router->post('reply','CommentController@reply');
 

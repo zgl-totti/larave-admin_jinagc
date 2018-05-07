@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Goods;
+use App\Models\GoodsType;
 use App\Models\IntegralGoods;
 
 use Encore\Admin\Form;
@@ -13,6 +14,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Http\Request;
 
 class IntegralGoodsController extends Controller
 {
@@ -90,6 +92,20 @@ class IntegralGoodsController extends Controller
             });
 
             $grid->column('goods.goods_name','商品名称')->label();
+
+            $grid->type('类型')->display(function ($type){
+                if(empty($type)){
+                    return '';
+                }
+
+                $type=array_map(function ($id){
+                    $info=GoodsType::find($id);
+                    return "<button class='btn btn-info' style='background-color: $info->tag;width: 35px;height: 20px;'></button>".'&nbsp;&nbsp;'.$info->name;
+                },$type);
+
+                return join('<br>',$type);
+            });
+
             $grid->integral('积分');
 
             $grid->status('状态')->switch([
@@ -131,22 +147,38 @@ class IntegralGoodsController extends Controller
             $id=request()->route()->parameters()['integral_good'] ?? 0;
             if(empty($id)){
                 $form->select('goods_id','商品名称')->options(function (){
-                    $brands=Goods::where('status',1)->pluck('goods_name','id');
-                    return $brands->prepend('请选择商品',0);
-                })->rules('required|unique:integral_goods');
+                    $goods=Goods::where('status',1)->pluck('goods_name','id');
+                    return $goods->prepend('请选择商品',0);
+                })->load('type',url('admin/type'))->rules('required|unique:integral_goods');
             }else {
                 $form->select('goods_id', '商品名称')->options(function () {
-                    $brands = Goods::where('status', 1)->pluck('goods_name', 'id');
-                    return $brands->prepend('请选择商品', 0);
-                })->rules('required|unique:integral_goods,goods_id,' . $id . ',id');
+                    $goods = Goods::where('status', 1)->pluck('goods_name', 'id');
+                    return $goods->prepend('请选择商品', 0);
+                })->load('type',url('admin/type'))->rules('required|unique:integral_goods,goods_id,' . $id . ',id');
             }
 
-            $form->number('integral','积分');
+            if($id){
+                $info=IntegralGoods::with('goods')->where('id',$id)->first();
+                $type=GoodsType::whereIn('id',$info->goods->type)->pluck('name','id');
+            }else{
+                $type=[];
+            }
+            $form->multipleSelect('type','商品类型')->options($type);
+
+            $form->number('integral','积分')->rules('required|integer');
 
             $form->switch('status','状态');
 
             $form->display('created_at', '创建时间');
             //$form->display('updated_at', 'Updated At');
         });
+    }
+
+    public function type(Request $request)
+    {
+        $type = $request->get('q');
+        $info=Goods::find($type);
+
+        return GoodsType::whereIn('id',$info)->pluck('name','id');
     }
 }

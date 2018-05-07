@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Goods;
+use App\Models\GoodsType;
 use App\Models\Promotions;
 
 use Encore\Admin\Form;
@@ -78,6 +79,19 @@ class PromotionsController extends Controller
 
             $grid->title('活动标题')->label();
             $grid->column('goods.goods_name','促销商品')->label('info');
+
+            $grid->type('类型')->display(function ($type){
+                if(empty($type)){
+                    return '';
+                }
+                $type=array_map(function ($id){
+                    $info=GoodsType::find($id);
+                    return "<button class='btn btn-info' style='background-color: $info->tag;width: 35px;height: 20px;'></button>".'&nbsp;&nbsp;'.$info->name;
+                },$type);
+
+                return join('<br>',$type);
+            });
+
             $grid->promotions_price('促销价格');
             $grid->inventory_number('促销数量');
             $grid->sale_number('销量');
@@ -120,17 +134,18 @@ class PromotionsController extends Controller
                 $form->text('title','活动标题')->rules('required|unique:promotions');
             }
 
-            if(empty($id)){
-                $form->select('goods_id','商品名称')->options(function (){
-                    $brands=Goods::where('status',1)->pluck('goods_name','id');
-                    return $brands->prepend('请选择商品',0);
-                })->rules('required|unique:promotions');
-            }else {
-                $form->select('goods_id', '商品名称')->options(function () {
-                    $brands = Goods::where('status', 1)->pluck('goods_name', 'id');
-                    return $brands->prepend('请选择商品', 0);
-                })->rules('required|unique:promotions,goods_id,' . $id . ',id');
+            $form->select('goods_id','商品名称')->options(function (){
+                $goods=Goods::where('status',1)->pluck('goods_name','id');
+                return $goods->prepend('请选择商品',0);
+            })->load('type',url('admin/type'))->rules('required');
+
+            if($id){
+                $info=Promotions::with('goods')->where('id',$id)->first();
+                $type=GoodsType::whereIn('id',$info->goods->type)->pluck('name','id');
+            }else{
+                $type=[];
             }
+            $form->multipleSelect('type','商品类型')->options($type);
 
             $form->currency('promotions_price','促销价格')->symbol('￥')->rules('required|numeric');
             $form->number('inventory_number','促销数量')->rules('required|integer');

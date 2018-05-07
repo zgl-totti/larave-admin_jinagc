@@ -43,6 +43,7 @@ class CreateOrderTable extends Migration
             $table->increments('id');
             $table->integer('order_id');
             $table->integer('goods_id');
+            $table->integer('type_id');
             $table->integer('buy_number');
             $table->decimal('buy_price',15,2);
             $table->timestamps();

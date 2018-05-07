@@ -6,6 +6,7 @@ use App\Admin\Extensions\ExcelExporter;
 use App\Admin\Extensions\Shipments;
 use App\Models\ChinaArea;
 use App\Models\Express;
+use App\Models\GoodsType;
 use App\Models\Order;
 use App\Models\Seckill;
 use App\Models\SeckillOrder;
@@ -93,8 +94,13 @@ class SeckillOrderController extends Controller
                 return str_limit($title,20) ?? '';
             });
 
+            $grid->column('type_id','商品类型')->display(function ($type){
+                $info=GoodsType::find($type);
+                return "<button class='btn btn-info' style='background-color: $info->tag;width: 35px;height: 20px;'></button>".'&nbsp;&nbsp;'.$info->name;
+            });
+
             //$grid->column('seckill.goods_id','商品名称');
-            $grid->num('商品数量');
+            $grid->num('数量');
             $grid->price('订单总价');
 
             $grid->column('consignee','收货人');
