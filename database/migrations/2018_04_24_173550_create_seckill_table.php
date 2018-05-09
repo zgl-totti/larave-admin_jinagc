@@ -22,7 +22,8 @@ class CreateSeckillTable extends Migration
             $table->integer('num');
             $table->integer('limit');
             $table->smallInteger('status')->comment('1为展示2为下架')->default(1);
-            $table->timestamps(['begin_at','end_at']);
+            $table->timestamp('begin_at');
+            $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });
 
@@ -54,7 +55,8 @@ class CreateSeckillTable extends Migration
             $table->integer('num');
             $table->integer('limit');
             $table->smallInteger('status')->comment('1为展示2为下架')->default(1);
-            $table->timestamps(['begin_at','end_at']);
+            $table->timestamp('begin_at');
+            $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });
 
@@ -78,7 +80,8 @@ class CreateSeckillTable extends Migration
             $table->integer('sale_number');
             $table->integer('limit');
             $table->smallInteger('status')->comment('1为展示2为下架')->default(1);
-            $table->timestamps(['begin_at','end_at']);
+            $table->timestamp('begin_at');
+            $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });
     }

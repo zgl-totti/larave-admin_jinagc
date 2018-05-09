@@ -42,6 +42,8 @@ Route::group([
         'bonus'=>BonusController::class,
         'bonus_users'=>BonusUsersController::class,
         'promotions'=>PromotionsController::class,
+        'hot_words'=>HotWordsController::class,
+        'navigation'=>NavigationController::class
     ]);
 
     $router->post('order/shipments','OrderController@shipments');

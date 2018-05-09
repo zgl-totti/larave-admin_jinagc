@@ -30,7 +30,7 @@ class CreateGoodsTable extends Migration
             $table->smallInteger('new')->comment('1为新品');
             $table->smallInteger('recommend')->comment('1为推荐');
             $table->string('pic',100);
-            $table->json('images');
+            $table->json('images')->nullable();
             $table->smallInteger('status')->comment('1为展示2为下架')->default(1);
             $table->timestamps();
         });

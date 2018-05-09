@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryTable extends Migration
+class CreateHotWordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
+        Schema::create('hot_words', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cate_name',50)->unique();
-            $table->integer('parent_id');
-            $table->string('cate_path',100)->nullable();
-            $table->integer('status')->comment('1为展示2为下架')->default(1);
+            $table->string('hot_word')->unique();
+            $table->bigInteger('click_total');
+            $table->smallInteger('status')->default(1)->comment('1为上架2为下架');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category');
+        Schema::dropIfExists('hot_words');
     }
 }

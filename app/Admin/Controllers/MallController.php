@@ -76,13 +76,16 @@ class MallController extends Controller
             $grid->id('编号')->sortable();
 
             $grid->mall_name('商城名称')->label();
+            $grid->keywords('关键字')->label('info');
             $grid->column('describe','描述')->display(function ($describe){
                return str_limit(strip_tags($describe),20);
             });
-            $grid->keywords('关键字')->label('info');
             $grid->logo('LOGO')->image(asset('storage').'/',50,50);
-            $grid->hotline('热线');
-            $grid->qq('客服');
+            $grid->hotline('热线电话');
+            $grid->support_phone('售后电话');
+            $grid->qq('客服QQ');
+            $grid->ICP('备案号');
+            $grid->certificate('证书编号');
 
             $grid->status('状态')->switch([
                 'on' => ['text' => '展示'],
@@ -124,11 +127,14 @@ class MallController extends Controller
                 $form->text('mall_name','商城名称')->rules('required|unique:mall');
             }
 
-            $form->text('describe','描述')->rules('required');
             $form->text('keywords','关键字')->rules('required');
+            $form->text('describe','描述')->rules('required');
             $form->image('logo','LOGO')->uniqueName()->move('mall','public')->rules('required');
-            $form->text('hotline','热线')->rules('required|integer');
-            $form->text('qq','客服')->rules('required|integer');
+            $form->mobile('hotline','热线电话')->rules('required');
+            $form->mobile('support_phone','售后电话')->rules('required');
+            $form->text('qq','客服QQ')->rules('required');
+            $form->text('ICP','备案号')->rules('required');
+            $form->text('certificate','证书编号')->rules('required');
 
             if($id){
                 $form->switch('status','状态');
