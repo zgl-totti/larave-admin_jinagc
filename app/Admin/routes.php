@@ -43,7 +43,14 @@ Route::group([
         'bonus_users'=>BonusUsersController::class,
         'promotions'=>PromotionsController::class,
         'hot_words'=>HotWordsController::class,
-        'navigation'=>NavigationController::class
+        'navigation'=>NavigationController::class,
+        'notification'=>NotificationController::class,
+        'notification_type'=>NotificationTypeController::class,
+        'inquiry_cate'=>InquiryCateController::class,
+        'inquiry_departments'=>InquiryDepartmentsController::class,
+        'inquiry_expert'=>InquiryExpertController::class,
+        'inquiry_ask'=>InquiryAskController::class,
+        'inquiry_appointment'=>InquiryAppointmentController::class,
     ]);
 
     $router->post('order/shipments','OrderController@shipments');
@@ -59,5 +66,8 @@ Route::group([
     $router->get('type','IntegralGoodsController@type');
     $router->get('comments/{id}','CommentController@examine')->where('id','[0-9]+');
     $router->post('reply','CommentController@reply');
+    $router->get('resource','NotificationController@resource');
+    $router->get('ask/{id}','InquiryAskController@ask')->where('id','[0-9]+');
+    $router->get('expert','InquiryAppointmentController@expert');
 
 });

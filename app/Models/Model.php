@@ -8,6 +8,7 @@ class Model extends BaseModel
 {
     protected $guarded=[];
 
+
     const STATUS_ALLOT = 1;
     const STATUS_UNALLOT = 2;
 

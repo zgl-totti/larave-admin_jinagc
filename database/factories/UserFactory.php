@@ -114,3 +114,16 @@ $factory->define(App\Models\Promotions::class, function (Faker $faker) {
         'end_at'=>date('Y-m-d H:i:s',time()+18800)
     ];
 });
+
+$factory->define(App\Models\InquiryAppointment::class, function (Faker $faker) {
+    return [
+        'departments_id'=>rand(1,4),
+        'expert_id'=>rand(1,6),
+        'source_id'=>rand(1,5),
+        'user_id'=>rand(1,5000),
+        'phone'=>time(),
+        'type'=>rand(1,2),
+        'msg'=>str_random(4),
+        'appointment_time'=>date('Y-m-d H:i:s',time())
+    ];
+});
