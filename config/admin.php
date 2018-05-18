@@ -154,4 +154,9 @@ return [
     'extensions' => [
 
     ],
+
+    'hash' => [
+        'salt' => 'ZT1mdWxsJnM9MzAwMCZzaWduPWYxNTY2ZTczYTU5NGQ1OGNkYmIyMWEyODgyNDc3Y2QzJnQ',
+        'length' => '8',
+    ],
 ];
