@@ -51,6 +51,7 @@ Route::group([
         'inquiry_expert'=>InquiryExpertController::class,
         'inquiry_ask'=>InquiryAskController::class,
         'inquiry_appointment'=>InquiryAppointmentController::class,
+        'version'=>VersionController::class,
     ]);
 
     $router->post('order/shipments','OrderController@shipments');
