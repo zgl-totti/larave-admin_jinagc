@@ -70,5 +70,4 @@ Route::group([
     $router->get('resource','NotificationController@resource');
     $router->get('ask/{id}','InquiryAskController@ask')->where('id','[0-9]+');
     $router->get('expert','InquiryAppointmentController@expert');
-
 });

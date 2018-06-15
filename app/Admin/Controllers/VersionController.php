@@ -2,6 +2,8 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Download;
+use App\Admin\Extensions\Shipments;
 use App\Models\Version;
 
 use Encore\Admin\Form;
@@ -10,6 +12,8 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VersionController extends Controller
 {
@@ -83,7 +87,13 @@ class VersionController extends Controller
             $grid->is_force('更新状态')->display(function ($id){
                 return Version::isForceMap()[$id] ?? '未知';
             });
-            $grid->url('链接地址');
+
+            $grid->url('链接地址')->display(function ($url){
+                $src=asset('storage').'/'.$url;
+                return "<a href=".$src." download='app' target='_blank'><button class='btn btn-sm btn-facebook'>下载</button></a>";
+            });
+
+
             $grid->status('状态')->switch([
                 'on'=>['text'=>'上架'],
                 'off'=>['text'=>'下架']
@@ -120,7 +130,9 @@ class VersionController extends Controller
             $form->text('version','大版本号')->rules('required');
             $form->text('version_mini','小版本号')->rules('required');
             $form->radio('is_force','更新状态')->options(Version::isForceMap())->rules('required');
-            $form->text('url','链接地址')->rules('required');
+            //$form->text('url','链接地址')->rules('required');
+            $form->file('url','APP包文件')->uniqueName()->move('app','public')->rules('required');
+            //$form->file('url','APP包文件')->uniqueName()->move('app','public')->rules('required|mimetypes:application/vnd.android.package-archive');
 
             if($id){
                 $form->switch('status','状态');

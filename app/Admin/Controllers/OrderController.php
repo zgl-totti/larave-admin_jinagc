@@ -21,6 +21,7 @@ use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use yii\console\Exception;
 
 class OrderController extends Controller
@@ -168,6 +169,7 @@ class OrderController extends Controller
                 $filter->where(function ($query){
 
                     $username=$this->input;
+
                     $info=User::where('name','like',$username.'%')->select('id')->get();
 
                     $query->whereIn('user_id',$info);
@@ -194,6 +196,14 @@ class OrderController extends Controller
                 $grid->model()->whereDate('created_at','>',date('Y-m-d',$time));
             }elseif ($type=='month'){
                 $grid->model()->whereMonth('created_at',date('m'));
+            }
+
+
+            //从filter里拿条件
+            $conditions=$grid->getFilter()->conditions();
+            if(!isset($conditions[3])){
+                $grid->model()->whereIn('order_status',[2,3,4,5]);
+                Log::info('6666666');
             }
 
 
