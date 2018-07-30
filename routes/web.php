@@ -32,4 +32,6 @@ Route::group(['namespace'=>'Index'],function (){
 
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('roma/index', 'RomaController@index');
+    Route::get('category/index','CategoryController@index');
+    Route::post('category/index','CategoryController@index');
 });
