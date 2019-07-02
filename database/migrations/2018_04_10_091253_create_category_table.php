@@ -19,6 +19,8 @@ class CreateCategoryTable extends Migration
             $table->integer('parent_id');
             $table->string('cate_path',100)->nullable();
             $table->integer('status')->comment('1为展示2为下架')->default(1);
+            $table->index(['parent_id','status']);
+            $table->index(['cate_path','status']);
             $table->timestamps();
         });
     }

@@ -133,7 +133,7 @@ class UserController extends Controller
             //$form->display('id', 'ID');
 
             $id=request()->route()->parameters()['user'];
-            $form->text('name','用户名')->rules('required|max:20|min:5|unique:users,name,'.$id.',id');
+            $form->text('name','用户名')->rules('required|max:20|min:5|allow_letter|unique:users,name,'.$id.',id');
             $form->text('email','邮箱')->rules('required|email|unique:users,email,'.$id.',id');
 
             $form->switch('status','状态');

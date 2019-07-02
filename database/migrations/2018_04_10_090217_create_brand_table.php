@@ -18,6 +18,7 @@ class CreateBrandTable extends Migration
             $table->string('brand_name',50)->unique();
             $table->integer('status')->comment('1为展示2为下架')->default(1);
             $table->string('logo',100);
+            $table->index(['brand_name','status']);
             $table->timestamps();
         });
     }
