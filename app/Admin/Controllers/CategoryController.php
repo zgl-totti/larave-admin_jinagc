@@ -178,6 +178,10 @@ class CategoryController extends Controller
                     }
 
                     DB::update("update category set cate_path=replace(cate_path,'{$old_path}','{$new_path}') where cate_path like '{$old_path}%'");
+
+
+                    //find_in_set表达式
+                    DB::table('category')->whereRaw('FIND_IN_SET(1,cate_path)', true)->get();
                 }
             });
         });
